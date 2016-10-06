@@ -1,1 +1,1 @@
-alert('test');
+window.location = "http://www.google.com";
