@@ -1,1 +1,1 @@
-console.log(document.documentElement.outerHTML);
+console.log(document.documentElement.innerHTML);
