@@ -1,1 +1,1 @@
-window.location = "http://www.google.com";
+console.log(window);
