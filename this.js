@@ -6,12 +6,14 @@ confirm("Sorry about your browser!");
 //  console.log(grill);
 // console.log("It's getting hot!");
 //}
-
+var count = 0
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
         var anHttpRequest = new XMLHttpRequest();
         anHttpRequest.onreadystatechange = function() { 
             if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                count = count + 1;
+                console.log(count);
                 aCallback(anHttpRequest.responseText);
         }
 
